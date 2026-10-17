@@ -15,6 +15,7 @@ dist-ssr
 .env.*
 .agents
 .gemini
+.vercel
 
 # Editor directories and files
 .vscode/*

@@ -5,12 +5,13 @@
     --font-sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   
-  body {
+  html, body {
     font-family: var(--font-sf);
-    background-color: #0b0c10;
+    background-color: #08080a;
     color: #f3f4f6;
     overflow-x: hidden;
     user-select: none;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
