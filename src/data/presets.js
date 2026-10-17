@@ -1,4 +1,6 @@
-export const CARD_PRESETS = [
+import { OLEO_PRESETS } from './oleoSkins';
+
+export const CLASSIC_PRESETS = [
   {
     id: 'apple-titanium',
     name: 'Apple Card Titanium',
@@ -338,3 +340,6 @@ export const CARD_PRESETS = [
     foilEffect: 'silver',
   }
 ];
+
+export const CARD_PRESETS = [...OLEO_PRESETS, ...CLASSIC_PRESETS];
+

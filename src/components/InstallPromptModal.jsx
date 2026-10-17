@@ -17,7 +17,7 @@ export function InstallPromptModal({ isOpen, onClose, deferredPrompt, onInstallC
               <img src="/pwa-192x192.png" alt="CardStudio" className="w-7 h-7 rounded-lg" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white tracking-tight">Install CardStudio</h3>
+              <h3 className="text-base font-bold text-white tracking-tight">Install Yosfy is App</h3>
               <p className="text-xs text-neutral-400">Add to your device for offline use</p>
             </div>
           </div>

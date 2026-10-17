@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  const [currentCard, setCurrentCard] = useState(CARD_PRESETS[0]);
+  const [currentCard, setCurrentCard] = useState(CARD_PRESETS[4] || CARD_PRESETS[0]);
   const [isFlipped, setIsFlipped] = useState(false);
   const [previewMode, setPreviewMode] = useState('3d-tilt'); // '3d-tilt' | 'iphone-wallet' | 'apple-watch'
   const [isPresetsOpen, setIsPresetsOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function App() {
   }, []);
 
   // Undo / Redo history stack
-  const [history, setHistory] = useState([CARD_PRESETS[0]]);
+  const [history, setHistory] = useState([CARD_PRESETS[4] || CARD_PRESETS[0]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const handleCardChange = (updatedCard) => {
@@ -107,10 +107,10 @@ export default function App() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base tracking-tight text-white">Apple Pay</span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Card Studio</span>
+              <span className="font-bold text-base tracking-tight text-white">Yosfy is App</span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Studio</span>
             </div>
-            <span className="text-[10px] text-neutral-400 block -mt-0.5">Design, 3D Preview & Apple Wallet PassKit</span>
+            <span className="text-[10px] text-neutral-400 block -mt-0.5">3D Card Studio & 150+ Oleo Designs</span>
           </div>
         </div>
 
@@ -121,7 +121,8 @@ export default function App() {
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-white/20 hover:bg-neutral-800 text-xs font-medium text-neutral-200 transition-all shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Presets Gallery</span>
+            <span>Oleo & Presets Gallery</span>
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">150+</span>
           </button>
 
           <button

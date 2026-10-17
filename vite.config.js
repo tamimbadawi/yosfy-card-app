@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
-        name: 'Apple Pay Card Studio',
-        short_name: 'CardStudio',
-        description: 'Design custom Apple Pay cards with 3D tilt, Apple Wallet mockups, and export retina card art or PassKit packages.',
+        name: 'Yosfy is App',
+        short_name: 'Yosfy is App',
+        description: 'Design custom Apple Pay cards with 3D tilt, 150+ Oleo skins, Apple Wallet mockups, and export retina card art.',
         theme_color: '#08080a',
         background_color: '#08080a',
         display: 'standalone',

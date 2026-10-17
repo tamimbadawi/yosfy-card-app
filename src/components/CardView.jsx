@@ -125,7 +125,7 @@ export function CardView({
               className="absolute inset-0 bg-cover bg-center pointer-events-none"
               style={{
                 backgroundImage: `url(${card.customImage})`,
-                opacity: card.imageOpacity ?? 0.85,
+                opacity: card.imageOpacity !== undefined ? card.imageOpacity : (card.isOleoDesign || card.backgroundType === 'custom' ? 1 : 0.85),
                 mixBlendMode: card.imageBlendMode || 'normal',
                 transform: `scale(${card.imageScale || 1})`,
                 backgroundSize: card.imageFit || 'cover'
