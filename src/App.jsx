@@ -32,6 +32,8 @@ export default function App() {
   const [isInstallOpen, setIsInstallOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [cardScale, setCardScale] = useState(1);
+  const [viewAngle, setViewAngle] = useState(null); // { x: number, y: number }
+  const [isAutoSpin, setIsAutoSpin] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstall = (e) => {
@@ -280,12 +282,82 @@ export default function App() {
                     isFlipped={isFlipped}
                     interactive={true}
                     scale={cardScale}
+                    viewAngle={viewAngle}
+                    isAutoSpin={isAutoSpin}
                     onCardClick={() => setIsFlipped(!isFlipped)}
                   />
                 </div>
 
-                <div className="mt-8 flex items-center gap-2 text-xs text-neutral-500 select-none">
-                  <span>Hover to feel 3D Apple Card light reflection • Click to flip</span>
+                {/* 3D Side & Angle Presets */}
+                <div className="mt-5 flex items-center gap-1.5 p-1.5 bg-neutral-900/90 border border-white/10 rounded-2xl backdrop-blur-xl shadow-lg max-w-full overflow-x-auto select-none">
+                  <button
+                    onClick={() => {
+                      setIsAutoSpin(false);
+                      setViewAngle({ x: 0, y: 0 });
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                      !isAutoSpin && viewAngle?.x === 0 && viewAngle?.y === 0
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    Front (0°)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsAutoSpin(false);
+                      setViewAngle({ x: 6, y: -55 });
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                      !isAutoSpin && viewAngle?.y === -55
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    Left Side (-55°)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsAutoSpin(false);
+                      setViewAngle({ x: 6, y: 55 });
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                      !isAutoSpin && viewAngle?.y === 55
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    Right Side (+55°)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsAutoSpin(false);
+                      setViewAngle({ x: 22, y: -38 });
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                      !isAutoSpin && viewAngle?.x === 22
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    3D Isometric
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsAutoSpin(!isAutoSpin);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                      isAutoSpin
+                        ? 'bg-amber-500 text-black font-semibold shadow-md shadow-amber-500/20'
+                        : 'text-amber-400 hover:text-white hover:bg-neutral-800'
+                    }`}
+                  >
+                    <span>{isAutoSpin ? 'Pause Spin' : '3D Auto-Spin 💫'}</span>
+                  </button>
+                </div>
+
+                <div className="mt-2.5 text-center text-[11px] text-neutral-400 select-none">
+                  <span>👆 Drag card with your finger or mouse to freely rotate to any angle</span>
                 </div>
               </div>
             )}

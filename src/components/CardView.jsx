@@ -18,37 +18,91 @@ export function CardView({
   interactive = true, 
   scale = 1,
   id = "apple-pay-card-render",
-  onCardClick
+  onCardClick,
+  viewAngle = null, // { x: number, y: number }
+  isAutoSpin = false,
+  onRotateChange,
 }) {
   const cardRef = useRef(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
+  const isDraggingRef = useRef(false);
+  const lastPointerRef = useRef({ x: 0, y: 0 });
 
-  const handleMouseMove = (e) => {
+  // Sync external viewAngle prop
+  useEffect(() => {
+    if (viewAngle) {
+      setRotateX(viewAngle.x);
+      setRotateY(viewAngle.y);
+      setGlarePos({ x: 50 + (viewAngle.y * 0.4), y: 50 + (viewAngle.x * 0.4), opacity: 0.5 });
+    }
+  }, [viewAngle]);
+
+  // Auto-spin animation loop
+  useEffect(() => {
+    if (!isAutoSpin) return;
+    let animId;
+    const animate = () => {
+      setRotateY((prev) => (prev + 0.8) % 360);
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [isAutoSpin]);
+
+  // Pointer / Touch down
+  const handlePointerDown = (e) => {
+    if (!interactive) return;
+    isDraggingRef.current = true;
+    lastPointerRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  // Pointer / Touch move
+  const handlePointerMove = (e) => {
     if (!interactive || !cardRef.current) return;
+    
+    if (isDraggingRef.current) {
+      // Free 3D Drag Rotation (works on Mobile touch & Desktop mouse)
+      const deltaX = e.clientX - lastPointerRef.current.x;
+      const deltaY = e.clientY - lastPointerRef.current.y;
+      lastPointerRef.current = { x: e.clientX, y: e.clientY };
+
+      setRotateY((prev) => prev + deltaX * 0.7);
+      setRotateX((prev) => Math.max(-60, Math.min(60, prev - deltaY * 0.7)));
+      setGlarePos({ x: 50 + (deltaX * 2), y: 50 - (deltaY * 2), opacity: 0.7 });
+      return;
+    }
+
+    // Default hover tilt when not dragging
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
-    // Percentage
     const px = (x / rect.width) * 100;
     const py = (y / rect.height) * 100;
     
-    // Tilt angles (subtle & realistic Apple tilt max +- 14 deg)
-    const rx = ((py - 50) / 50) * -12;
-    const ry = ((px - 50) / 50) * 14;
+    const rx = ((py - 50) / 50) * -14;
+    const ry = ((px - 50) / 50) * 18;
 
-    setRotateX(rx);
-    setRotateY(ry);
+    if (!viewAngle && !isAutoSpin) {
+      setRotateX(rx);
+      setRotateY(ry);
+    }
     setGlarePos({ x: px, y: py, opacity: 0.65 });
   };
 
-  const handleMouseLeave = () => {
-    if (!interactive) return;
-    setRotateX(0);
-    setRotateY(0);
-    setGlarePos((prev) => ({ ...prev, opacity: 0 }));
+  // Pointer up / end
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handlePointerLeave = () => {
+    isDraggingRef.current = false;
+    if (!viewAngle && !isAutoSpin) {
+      setRotateX(0);
+      setRotateY(0);
+      setGlarePos((prev) => ({ ...prev, opacity: 0 }));
+    }
   };
 
   // Build card background style
@@ -87,6 +141,21 @@ export function CardView({
     return '';
   };
 
+  // Calculate realistic metallic edge thickness when viewed from sides
+  const effectiveRY = rotateY + (isFlipped ? 180 : 0);
+  const edgeDepthX = -Math.sin((effectiveRY * Math.PI) / 180) * 6;
+  const edgeDepthY = Math.sin((rotateX * Math.PI) / 180) * 5;
+
+  const volumetricBoxShadow = `
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    ${edgeDepthX * 0.4}px ${edgeDepthY * 0.4}px 0px rgba(220, 220, 225, 0.6),
+    ${edgeDepthX * 0.8}px ${edgeDepthY * 0.8}px 0px rgba(160, 160, 170, 0.5),
+    ${edgeDepthX * 1.3}px ${edgeDepthY * 1.3}px 1px rgba(90, 90, 100, 0.4),
+    ${edgeDepthX * 1.8}px ${edgeDepthY * 1.8}px 2px rgba(30, 30, 40, 0.35),
+    0 28px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 25px 2px rgba(255, 255, 255, 0.05)
+  `;
+
   return (
     <div 
       className="relative select-none perspective-[1200px]"
@@ -95,19 +164,20 @@ export function CardView({
       <div
         id={id}
         ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={onCardClick}
-        className="w-[min(calc(100vw-2.5rem),440px)] h-[calc(min(calc(100vw-2.5rem),440px)/1.5845)] rounded-[20px] sm:rounded-[24px] shadow-2xl relative transition-transform duration-200 ease-out preserve-3d cursor-pointer overflow-hidden border border-white/10"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
+        onClick={(e) => {
+          if (!isDraggingRef.current && onCardClick) onCardClick(e);
+        }}
+        className="w-[min(calc(100vw-2.5rem),440px)] h-[calc(min(calc(100vw-2.5rem),440px)/1.5845)] rounded-[20px] sm:rounded-[24px] relative transition-transform duration-150 ease-out preserve-3d cursor-grab active:cursor-grabbing overflow-hidden border border-white/20 touch-none"
         style={{
           transform: interactive 
-            ? `rotateX(${rotateX}deg) rotateY(${rotateY + (isFlipped ? 180 : 0)}deg)`
+            ? `rotateX(${rotateX}deg) rotateY(${effectiveRY}deg)`
             : `rotateY(${isFlipped ? 180 : 0}deg)`,
           transformStyle: 'preserve-3d',
-          transition: 'transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease',
-          boxShadow: isFlipped
-            ? '0 25px 50px -12px rgba(0, 0, 0, 0.65)'
-            : '0 28px 60px -15px rgba(0, 0, 0, 0.55), 0 0 20px 2px rgba(255, 255, 255, 0.05)'
+          boxShadow: volumetricBoxShadow
         }}
       >
         {/* ================= FRONT SIDE ================= */}
