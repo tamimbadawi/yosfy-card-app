@@ -197,7 +197,7 @@ export default function App() {
       {/* ================= MAIN STUDIO WORKSPACE ================= */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* Left / Center: Interactive Preview Stage */}
-        <div className="flex-1 flex flex-col items-center justify-between p-6 overflow-y-auto relative bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.12),rgba(255,255,255,0))]">
+        <div className="flex-1 flex flex-col items-center justify-between p-3 sm:p-6 overflow-y-auto relative bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.12),rgba(255,255,255,0))]">
           
           {/* Top Stage Bar: Mode Selector */}
           <div className="w-full max-w-xl flex items-center justify-between mb-4 z-20">

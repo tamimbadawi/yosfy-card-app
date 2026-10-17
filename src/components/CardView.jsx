@@ -98,7 +98,7 @@ export function CardView({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={onCardClick}
-        className="w-[430px] h-[272px] sm:w-[450px] sm:h-[284px] rounded-[24px] shadow-2xl relative transition-transform duration-200 ease-out preserve-3d cursor-pointer overflow-hidden border border-white/10"
+        className="w-[min(calc(100vw-2.5rem),440px)] h-[calc(min(calc(100vw-2.5rem),440px)/1.5845)] rounded-[20px] sm:rounded-[24px] shadow-2xl relative transition-transform duration-200 ease-out preserve-3d cursor-pointer overflow-hidden border border-white/10"
         style={{
           transform: interactive 
             ? `rotateX(${rotateX}deg) rotateY(${rotateY + (isFlipped ? 180 : 0)}deg)`
@@ -112,7 +112,7 @@ export function CardView({
       >
         {/* ================= FRONT SIDE ================= */}
         <div 
-          className="absolute inset-0 w-full h-full backface-hidden rounded-[24px] overflow-hidden p-6 flex flex-col justify-between"
+          className="absolute inset-0 w-full h-full backface-hidden rounded-[20px] sm:rounded-[24px] overflow-hidden p-4 sm:p-6 flex flex-col justify-between"
           style={{
             ...getCardBackgroundStyle(),
             transform: 'rotateY(0deg)',
@@ -272,7 +272,7 @@ export function CardView({
 
         {/* ================= BACK SIDE ================= */}
         <div 
-          className="absolute inset-0 w-full h-full rounded-[24px] overflow-hidden flex flex-col justify-between"
+          className="absolute inset-0 w-full h-full rounded-[20px] sm:rounded-[24px] overflow-hidden p-4 sm:p-6 flex flex-col justify-between"
           style={{
             ...getCardBackgroundStyle(),
             transform: 'rotateY(180deg)',
