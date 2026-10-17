@@ -226,7 +226,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* Flip card button for 3D mode */}
+            {/* Flip card & quick export buttons for 3D mode */}
             {previewMode === '3d-tilt' && (
               <div className="flex items-center gap-2">
                 <button
@@ -235,6 +235,13 @@ export default function App() {
                 >
                   <RotateCw className="w-3.5 h-3.5 text-blue-400" />
                   <span>{isFlipped ? 'View Front' : 'Flip to Back'}</span>
+                </button>
+                <button
+                  onClick={() => setIsExportOpen(true)}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-all shadow-md shadow-blue-500/25"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export PNG</span>
                 </button>
               </div>
             )}
